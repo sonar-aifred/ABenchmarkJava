@@ -16,8 +16,6 @@ jobs:
       with:
         java-version: 17
         distribution: zulu
-    - name: Run Spotless check
-      run: mvn spotless:check
     - name: Create WAR
       run: mvn package
 
