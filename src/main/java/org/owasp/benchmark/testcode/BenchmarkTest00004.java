@@ -29,6 +29,8 @@ public class BenchmarkTest00004 extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String SESSION_ATTRIBUTE_NAME = "BenchmarkTest00004.item";
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -65,12 +67,14 @@ public class BenchmarkTest00004 extends HttpServlet {
         }
 
         // javax.servlet.http.HttpSession.setAttribute(java.lang.String^,java.lang.Object)
-        request.getSession().setAttribute(param, "10340");
+        request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME, param);
 
         response.getWriter()
                 .println(
                         "Item: '"
+                                + SESSION_ATTRIBUTE_NAME
+                                + "' with value: '"
                                 + org.owasp.benchmark.helpers.Utils.encodeForHTML(param)
-                                + "' with value: '10340' saved in session.");
+                                + "' saved in session.");
     }
 }
