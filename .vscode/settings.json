@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "https-aeab3818392d-ngrok-app",
+        "projectKey": "sonar-aifred_BenchmarkJava_9eb317a7-9374-40a8-86da-721a5de29c35"
+    }
+}

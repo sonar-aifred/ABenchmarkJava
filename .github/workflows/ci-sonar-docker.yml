@@ -64,8 +64,14 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          # Remaining settings live in sonar-project.properties
-          args: -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
+          # Remaining settings live in sonar-project.properties.
+          # A project-level sonar.exclusions replaces the server-wide default, which includes
+          # **/generated-sources/**. The dummy pattern matches nothing, so nothing is excluded.
+          # target/generated-sources is added to sonar.sources so it is actually analysed.
+          args: >
+            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
+            -Dsonar.sources=src/main/java,src/main/webapp,target/generated-sources
+            -Dsonar.exclusions=**/__no_exclusions__/**
 
       - name: SonarQube quality gate
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
