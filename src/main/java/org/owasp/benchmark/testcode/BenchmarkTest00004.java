@@ -64,13 +64,14 @@ public class BenchmarkTest00004 extends HttpServlet {
             }
         }
 
-        // javax.servlet.http.HttpSession.setAttribute(java.lang.String^,java.lang.Object)
-        request.getSession().setAttribute(param, "10340");
+        // Use a fixed, server-defined session attribute name; never a request-derived key.
+        request.getSession().setAttribute("BenchmarkTest00004", "10340");
 
         response.getWriter()
                 .println(
-                        "Item: '"
+                        "Item: 'BenchmarkTest00004' with value: '10340' saved in session."
+                                + " Supplied value ignored: '"
                                 + org.owasp.benchmark.helpers.Utils.encodeForHTML(param)
-                                + "' with value: '10340' saved in session.");
+                                + "'.");
     }
 }
