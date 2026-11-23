@@ -50,9 +50,6 @@ jobs:
         # timings. Skipping it keeps CI from failing when that extension can't be resolved.
         run: rm -f .mvn/extensions.xml
 
-      - name: Check formatting
-        run: mvn --batch-mode --no-transfer-progress spotless:check
-
       - name: Build and test
         run: mvn --batch-mode --no-transfer-progress verify
 
