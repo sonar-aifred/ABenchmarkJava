@@ -69,7 +69,6 @@ jobs:
           # **/generated-sources/**. The dummy pattern matches nothing, so nothing is excluded.
           # target/generated-sources is added to sonar.sources so it is actually analysed.
           args: >
-            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
             -Dsonar.sources=src/main/java,src/main/webapp,target/generated-sources
             -Dsonar.exclusions=**/__no_exclusions__/**
 
