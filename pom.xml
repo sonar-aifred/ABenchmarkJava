@@ -793,6 +793,13 @@
             <version>1.70</version>
         </dependency>
 
+        <!-- Intentionally vulnerable (CVE-2022-42889 / Text4Shell) to exercise SonarQube SCA reachability -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
+
         <!-- Kevin's fix for jar version conflicts. For future Benchmark 1.3 -->
         <dependency>
             <groupId>org.hibernate</groupId>
