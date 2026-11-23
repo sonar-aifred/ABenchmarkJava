@@ -70,7 +70,7 @@ jobs:
           # target/generated-sources is added to sonar.sources so it is actually analysed.
           args: >
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
-            -Dsonar.sources=src/main/java,src/main/webapp,target/generated-sources
+            -Dsonar.sources=src/main/java,src/main/webapp,target/classes
             -Dsonar.exclusions=**/__no_exclusions__/**
 
       - name: SonarQube quality gate
