@@ -30,7 +30,7 @@ import { Sequelize, Transaction } from 'sequelize'
 let sequelize = createSequelize()
 
 function createSequelize (options?: { inMemory?: boolean }) {
-  return new Sequelize('database', 'username', 'password', {
+  return new Sequelize('database', 'username', process.env.DATABASE_PASSWORD, {
     dialect: 'sqlite',
     retry: {
       match: [/SQLITE_BUSY/],
