@@ -53,6 +53,10 @@ jobs:
       - name: Build and test
         run: mvn --batch-mode --no-transfer-progress verify
 
+      - name: Copy dependency jars for Sonar
+        # Referenced by sonar.java.libraries so the analyzer can resolve third-party calls.
+        run: mvn --batch-mode --no-transfer-progress dependency:copy-dependencies -DoutputDirectory=target/dependency -DincludeScope=test
+
       - name: SonarQube scan
         # Secrets are not exposed to fork PRs; skip the scan there.
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
