@@ -91,13 +91,13 @@ public class BenchmarkTest00003 extends HttpServlet {
                     new java.io.File(
                             new java.io.File(org.owasp.benchmark.helpers.Utils.TESTFILES_DIR),
                             "passwordFile.txt");
-            java.io.FileWriter fw =
-                    new java.io.FileWriter(fileTarget, true); // the true will append the new data
-            fw.write(
-                    "hash_value="
-                            + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true)
-                            + "\n");
-            fw.close();
+            try (java.io.FileWriter fw =
+                    new java.io.FileWriter(fileTarget, true)) { // the true will append the new data
+                fw.write(
+                        "hash_value="
+                                + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true)
+                                + "\n");
+            }
             response.getWriter()
                     .println(
                             "Sensitive value '"

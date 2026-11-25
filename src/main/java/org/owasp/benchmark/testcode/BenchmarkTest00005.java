@@ -52,10 +52,10 @@ public class BenchmarkTest00005 extends HttpServlet {
         // Code based on example from:
         // http://examples.javacodegeeks.com/core-java/crypto/encrypt-decrypt-file-stream-with-des/
         // 8-byte initialization vector
-        //		byte[] iv = {
-        //			(byte)0xB2, (byte)0x12, (byte)0xD5, (byte)0xB2,
-        //			(byte)0x44, (byte)0x21, (byte)0xC3, (byte)0xC3033
-        //		};
+        //      byte[] iv = {
+        //          (byte)0xB2, (byte)0x12, (byte)0xD5, (byte)0xB2,
+        //          (byte)0x44, (byte)0x21, (byte)0xC3, (byte)0xC3033
+        //      };
         java.security.SecureRandom random = new java.security.SecureRandom();
         byte[] iv = random.generateSeed(8); // DES requires 8 byte keys
 
@@ -89,13 +89,13 @@ public class BenchmarkTest00005 extends HttpServlet {
                     new java.io.File(
                             new java.io.File(org.owasp.benchmark.helpers.Utils.TESTFILES_DIR),
                             "passwordFile.txt");
-            java.io.FileWriter fw =
-                    new java.io.FileWriter(fileTarget, true); // the true will append the new data
-            fw.write(
-                    "secret_value="
-                            + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true)
-                            + "\n");
-            fw.close();
+            try (java.io.FileWriter fw =
+                    new java.io.FileWriter(fileTarget, true)) { // the true will append the new data
+                fw.write(
+                        "secret_value="
+                                + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true)
+                                + "\n");
+            }
             response.getWriter()
                     .println(
                             "Sensitive value: '"
