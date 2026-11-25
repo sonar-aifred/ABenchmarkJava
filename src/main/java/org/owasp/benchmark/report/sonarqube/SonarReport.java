@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.owasp.benchmark.report.sonarqube.dto.SonarQubeResult;
 
@@ -29,7 +30,7 @@ public class SonarReport {
 
     private static final int PAGE_SIZE = 500;
 
-    private static final String sonarAuth =
+    private static final String SONAR_AUTH =
             Base64.getEncoder().encodeToString((SONAR_USER + ":" + SONAR_PASSWORD).getBytes());
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -58,17 +59,24 @@ public class SonarReport {
                 defaultCharset());
     }
 
-    private static String resultFilename() throws Exception {
+    private static String resultFilename() throws IOException {
         return "Benchmark_" + benchmarkVersion() + "-sonarqube-v" + apiCall("server/version");
     }
 
-    private static String benchmarkVersion() throws Exception {
-        return DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder()
-                .parse(new File("pom.xml"))
-                .getElementsByTagName("version")
-                .item(0)
-                .getTextContent();
+    private static String benchmarkVersion() throws IOException {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            return factory.newDocumentBuilder()
+                    .parse(new File("pom.xml"))
+                    .getElementsByTagName("version")
+                    .item(0)
+                    .getTextContent();
+        } catch (IOException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new IOException("Unable to read benchmark version from pom.xml", e);
+        }
     }
 
     private static Set<String> allJavaRules() throws IOException {
@@ -76,7 +84,7 @@ public class SonarReport {
 
         forAllPagesAt(
                 "rules/search",
-                (result) ->
+                result ->
                         result.rules.stream()
                                 .filter(rule -> rule.ruleId.startsWith("java:"))
                                 .forEach(rule -> javaRuleIds.add(rule.ruleId)));
@@ -113,7 +121,7 @@ public class SonarReport {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setDoOutput(true);
-        connection.setRequestProperty("Authorization", "Basic " + sonarAuth);
+        connection.setRequestProperty("Authorization", "Basic " + SONAR_AUTH);
 
         int status = connection.getResponseCode();
         if (status != 200) {
