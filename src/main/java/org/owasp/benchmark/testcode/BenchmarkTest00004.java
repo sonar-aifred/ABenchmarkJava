@@ -29,6 +29,8 @@ public class BenchmarkTest00004 extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String SESSION_ATTRIBUTE_NAME = "BenchmarkTest00004";
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -52,25 +54,14 @@ public class BenchmarkTest00004 extends HttpServlet {
         // some code
         response.setContentType("text/html;charset=UTF-8");
 
-        javax.servlet.http.Cookie[] theCookies = request.getCookies();
-
-        String param = "noCookieValueSupplied";
-        if (theCookies != null) {
-            for (javax.servlet.http.Cookie theCookie : theCookies) {
-                if (theCookie.getName().equals("BenchmarkTest00004")) {
-                    param = java.net.URLDecoder.decode(theCookie.getValue(), "UTF-8");
-                    break;
-                }
-            }
-        }
-
-        // javax.servlet.http.HttpSession.setAttribute(java.lang.String^,java.lang.Object)
-        request.getSession().setAttribute(param, "10340");
+        // Use a server-defined attribute name; never derive it from request data.
+        request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME, "10340");
 
         response.getWriter()
                 .println(
                         "Item: '"
-                                + org.owasp.benchmark.helpers.Utils.encodeForHTML(param)
+                                + org.owasp.benchmark.helpers.Utils.encodeForHTML(
+                                        SESSION_ATTRIBUTE_NAME)
                                 + "' with value: '10340' saved in session.");
     }
 }
