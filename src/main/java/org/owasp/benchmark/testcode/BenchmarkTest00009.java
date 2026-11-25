@@ -29,6 +29,9 @@ public class BenchmarkTest00009 extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    private static final java.util.logging.Logger LOGGER =
+            java.util.logging.Logger.getLogger(BenchmarkTest00009.class.getName());
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -90,13 +93,13 @@ public class BenchmarkTest00009 extends HttpServlet {
                     new java.io.File(
                             new java.io.File(org.owasp.benchmark.helpers.Utils.TESTFILES_DIR),
                             "passwordFile.txt");
-            java.io.FileWriter fw =
-                    new java.io.FileWriter(fileTarget, true); // the true will append the new data
-            fw.write(
-                    "hash_value="
-                            + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true)
-                            + "\n");
-            fw.close();
+            try (java.io.FileWriter fw =
+                    new java.io.FileWriter(fileTarget, true)) { // the true will append the new data
+                fw.write(
+                        "hash_value="
+                                + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true)
+                                + "\n");
+            }
             response.getWriter()
                     .println(
                             "Sensitive value '"
@@ -108,11 +111,11 @@ public class BenchmarkTest00009 extends HttpServlet {
                                     + "' hashed and stored<br/>");
 
         } catch (java.security.NoSuchAlgorithmException e) {
-            System.out.println(
+            LOGGER.info(
                     "Problem executing hash - TestCase java.security.MessageDigest.getInstance(java.lang.String,java.security.Provider)");
             throw new ServletException(e);
         } catch (java.security.NoSuchProviderException e) {
-            System.out.println(
+            LOGGER.info(
                     "Problem executing hash - TestCase java.security.MessageDigest.getInstance(java.lang.String,java.security.Provider)");
             throw new ServletException(e);
         }
