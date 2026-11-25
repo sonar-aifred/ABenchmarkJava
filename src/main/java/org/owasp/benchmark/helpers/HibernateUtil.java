@@ -69,10 +69,11 @@ public class HibernateUtil {
 
         try {
             Class.forName("org.hsqldb.jdbcDriver");
-            //			System.out.println("Driver Loaded.");
+            //          System.out.println("Driver Loaded.");
             String url = "jdbc:hsqldb:benchmarkDataBase;sql.enforce_size=false";
-            conn = DriverManager.getConnection(url, "sa", "");
-            //			System.out.println("Got Connection.");
+            String password = System.getProperty("database.password");
+            conn = DriverManager.getConnection(url, "sa", password);
+            //          System.out.println("Got Connection.");
             st = conn.createStatement();
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println("Problem with hibernate init.");
@@ -251,29 +252,29 @@ public class HibernateUtil {
         /*
          * Print out DB content *Debug
         try {
-        	Query query = classicSession.createQuery("FROM Hobby");
-        	final List<Hobby> list = new ArrayList<Hobby>();
-        	for (final Object o : query.list()) {
-        		list.add((Hobby) o);
-        	}
+            Query query = classicSession.createQuery("FROM Hobby");
+            final List<Hobby> list = new ArrayList<Hobby>();
+            for (final Object o : query.list()) {
+                list.add((Hobby) o);
+            }
 
-        	for (Hobby user1 : list) {
-        		System.out.println(user1.getHobbyId());
-        		System.out.println(user1.getName());
-        	}
+            for (Hobby user1 : list) {
+                System.out.println(user1.getHobbyId());
+                System.out.println(user1.getName());
+            }
 
-        	Query query1 = classicSession.createQuery("FROM User");
-        	final List<User> list1 = new ArrayList<User>();
-        	for (final Object o : query1.list()) {
-        		list1.add((User) o);
-        	}
+            Query query1 = classicSession.createQuery("FROM User");
+            final List<User> list1 = new ArrayList<User>();
+            for (final Object o : query1.list()) {
+                list1.add((User) o);
+            }
 
-        	for (User user1 : list1) {
-        		System.out.println(user1.getUserId());
-        		System.out.println(user1.getName());
-        	}
+            for (User user1 : list1) {
+                System.out.println(user1.getUserId());
+                System.out.println(user1.getName());
+            }
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
         */
         HashSet<Certificate> set1 = new HashSet<Certificate>();
