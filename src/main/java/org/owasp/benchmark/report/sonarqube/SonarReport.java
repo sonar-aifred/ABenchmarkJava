@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.owasp.benchmark.report.sonarqube.dto.SonarQubeResult;
 
@@ -63,8 +64,9 @@ public class SonarReport {
     }
 
     private static String benchmarkVersion() throws Exception {
-        return DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder()
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        return factory.newDocumentBuilder()
                 .parse(new File("pom.xml"))
                 .getElementsByTagName("version")
                 .item(0)
