@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *   <li>Unit price is supplied by the client and trusted (price tampering).
  *   <li>Quantity is not validated, so negative values produce negative totals.
  *   <li>Orders can be read by id without checking ownership (IDOR).
- *   <li>A coupon can be applied repeatedly, stacking the discount.
+ *   <li>A coupon can be applied only once per order, before payment.
  *   <li>Refunds are not capped at the amount paid and can be issued more than once.
  *   <li>Orders can be shipped without having been paid (workflow step skipping).
  * </ol>
@@ -33,6 +33,7 @@ public class OrderService {
         public long totalCents;
         public long paidCents;
         public Status status = Status.CREATED;
+        public boolean couponApplied;
 
         Order(long id, String owner, long totalCents) {
             this.id = id;
@@ -57,8 +58,14 @@ public class OrderService {
     }
 
     public static void applyCoupon(Order order, String code) {
-        if ("SAVE20".equals(code)) {
-            order.totalCents -= order.totalCents / 5;
+        final Order lockedOrder = order;
+        synchronized (lockedOrder) {
+            if ("SAVE20".equals(code)
+                    && !lockedOrder.couponApplied
+                    && lockedOrder.status == Status.CREATED) {
+                lockedOrder.totalCents -= lockedOrder.totalCents / 5;
+                lockedOrder.couponApplied = true;
+            }
         }
     }
 
